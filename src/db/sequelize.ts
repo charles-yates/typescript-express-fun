@@ -1,16 +1,16 @@
 import { DataTypes, Sequelize} from "sequelize";
 import { Movie } from "./models/Movie";
 
-const sequelize: Sequelize = new Sequelize('localdb', 'root', null, {
-    host: 'localhost',
-    dialect: 'sqlite',
+const sequelize: Sequelize = new Sequelize("localdb", "root", null, {
+    host: "localhost",
+    dialect: "sqlite",
     pool: {
         max: 5,
         min: 0,
         acquire: 30000,
         idle: 10000
     },
-    storage: 'data/database.sqlite',
+    storage: "data/database.sqlite",
     logging: false
 });
 
@@ -42,7 +42,7 @@ Movie.init({
     }
 }, {
     sequelize: sequelize,
-    tableName: 'movies',
+    tableName: "movies",
     timestamps: true
 });
 
@@ -52,8 +52,8 @@ export const init = async (force: boolean) => {
         await sequelize.sync({
             force: force || false
         });
-        return 'Connection has been established successfully.';
+        return "Connection has been established successfully.";
     } catch (error) {
-        throw new Error('DB Connection failed!');
+        throw new Error("DB Connection failed!");
     }
 };

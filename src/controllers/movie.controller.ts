@@ -5,11 +5,11 @@ export default class MovieController {
 
     public async createMovie(req: Request, res: Response): Promise<void> {
         const movie: Movie = await Movie.create({
-            format: req.params.format,
-            length: +req.params.length,
-            rating: +req.params.rating,
-            title: req.params.title,
-            year: +req.params.year
+            format: req.body.format,
+            length: +req.body.length,
+            rating: +req.body.rating,
+            title: req.body.title,
+            year: +req.body.year
         });
         res.json({
             movie: movie
@@ -41,11 +41,11 @@ export default class MovieController {
 
     public async updateMovie(req: Request, res: Response): Promise<void> {
         const movie: [number, Movie[]] = await Movie.update({
-            format: req.params.format,
-            length: +req.params.length,
-            rating: +req.params.rating,
-            title: req.params.title,
-            year: +req.params.year
+            format: req.body.format,
+            length: +req.body.length,
+            rating: +req.body.rating,
+            title: req.body.title,
+            year: +req.body.year
         }, {
             where: {
                 id: +req.params.id
