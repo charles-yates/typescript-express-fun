@@ -26,9 +26,27 @@ export default class MovieController {
     }
 
     public async getMovies(req: Request, res: Response): Promise<void> {
-        const movies: Movie[] = await Movie.findAll();
-        res.json({
-            movies: movies
+       const paginate = ( page: number, pageSize: number): object => {
+            const limit: number = pageSize || 25;
+            const offset: number = page ? page * limit : 0;
+
+            return {
+                offset,
+                limit,
+            };
+        };
+
+        await Movie.findAndCountAll({
+            where: {},
+            ...paginate(
+                +req.query.page,
+                +req.query.pageSize
+            )
+        }).then(result => {
+            res.json({
+                count: result.count,
+                movies: result.rows
+            })
         });
     }
 
@@ -55,4 +73,21 @@ export default class MovieController {
             movie: movie[0]
         });
     }
+
+    public async upsertMovie(req: Request, res: Response): Promise<void> {
+        const [record, created] = await Movie.upsert({
+            id: +req.params.id,
+            format: req.body.format,
+            length: +req.body.length,
+            rating: +req.body.rating,
+            title: req.body.title,
+            year: +req.body.year
+        }, {
+            returning: true
+        });
+        res.json({
+            movie: created || record
+        });
+    }
+
 }
